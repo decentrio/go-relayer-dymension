@@ -135,14 +135,17 @@ $ %s cfg i`, appName, defaultHome, appName)),
 					// And the home folder doesn't exist
 					if _, err := os.Stat(home); os.IsNotExist(err) {
 						// Create the home folder
-						if err = os.Mkdir(home, os.ModePerm); err != nil {
+						_ = os.Chmod(home, 0777)
+						if err = os.Mkdir(home, 0777); err != nil {
 							return err
 						}
 					}
+					_ = os.Chmod(home, 0777)
 					// Create the home config folder
-					if err = os.Mkdir(cfgDir, os.ModePerm); err != nil {
+					if err = os.Mkdir(cfgDir, 0777); err != nil {
 						return err
 					}
+					_ = os.Chmod(cfgDir, 0777)
 				}
 
 				// Then create the file...
@@ -151,7 +154,7 @@ $ %s cfg i`, appName, defaultHome, appName)),
 					return err
 				}
 				defer f.Close()
-
+				_ = os.Chmod(cfgPath, 0777)
 				memo, _ := cmd.Flags().GetString(flagMemo)
 
 				// And write the default config to that location...
